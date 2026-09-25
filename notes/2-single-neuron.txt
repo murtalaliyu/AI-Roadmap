@@ -1,0 +1,114 @@
+What this script does
+---------------------
+Trains a single neuron for binary classification with gradient descent.
+Same "predict → error → nudge weights" idea as linear regression, but with a
+sigmoid so the output is a probability between 0 and 1.
+
+
+What the data is
+----------------
+xs = [[1,2], [2,1], [2,3], [3,2], [6,7], [7,6], [7,8], [8,7]]
+ys = [0,0,0,0,1,1,1,1]
+
+- Each x is a 2D point (x1, x2)
+- Each y is a label: 0 or 1
+- Roughly: small coordinates → class 0; large coordinates → class 1
+- The neuron learns a line that separates the two classes
+
+
+Parameters
+----------
+w1, w2, b = 0.0, 0.0, 0.0
+lr = 0.1
+
+w1, w2 — weights for the two inputs
+b      — bias (shifts the decision boundary)
+lr     — learning rate (step size)
+
+Start at zeros → initially every prediction is ~0.5 (coin flip).
+
+
+Forward pass: one neuron
+------------------------
+        z = w1*x[0] + w2*x[1] + b
+        p = 1 / (1 + math.exp(-z))
+
+1. Linear score
+   z = w1*x1 + w2*x2 + b
+   Same idea as y = wx + b in linear regression, but with two features.
+
+2. Sigmoid
+   p = 1 / (1 + e^(-z))
+   Maps z into (0, 1). Treat p as P(class = 1).
+
+   - Large positive z → p ≈ 1
+   - Large negative z → p ≈ 0
+   - z = 0 → p = 0.5 (decision boundary)
+
+So one neuron here = logistic regression.
+
+
+Error and weight updates
+------------------------
+        err = p - y
+        w1 -= lr * err * x[0]
+        w2 -= lr * err * x[1]
+        b  -= lr * err
+
+err = p - y: how far the probability is from the true label.
+
+Updates are stochastic gradient descent on binary cross-entropy
+(for sigmoid + that loss, the gradient simplifies to (p - y) * feature).
+
+Intuition:
+
+- If y = 1 but p is low → err negative → weights increase (push p up)
+- If y = 0 but p is high → err positive → weights decrease (push p down)
+- Features with larger |x| change weights more (err * x[i])
+
+b has no feature multiplier (as if feature = 1).
+
+
+Training loop
+-------------
+for epoch in range(200):
+    for x, y in zip(xs, ys):
+
+- 200 epochs: full passes over all 8 points
+- Inner loop: one example at a time → online / SGD (update after each point)
+- Unlike 1-linear-regression.py, which accumulates gradients over the whole
+  batch then updates once
+
+
+Contrast with 1-linear-regression.py
+------------------------------------
+                Linear regression          One neuron
+--------------  -------------------------  -------------------------
+Output          Continuous number          Probability in (0, 1)
+Activation      None (identity)            Sigmoid
+Labels          Real values                0 / 1
+Update style    Batch (sum grads, update)  Per-example SGD
+Goal            Fit a line through points  Separate two classes
+
+
+What you end up with
+--------------------
+After training, w1, w2, b define a decision boundary:
+
+    w1*x1 + w2*x2 + b = 0
+
+- One side → predict class 1 (p > 0.5)
+- Other side → class 0
+
+The script never prints or plots; it only runs the updates.
+To inspect learning, print w1, w2, b (or p per point) after the loops.
+
+
+Mental picture
+--------------
+x1 ──► * w1 ─┐
+             ├─► sum (+ b) ──► sigmoid ──► p ∈ (0,1)
+x2 ──► * w2 ─┘
+
+That is the smallest neural network: one neuron, two inputs, sigmoid
+activation, trained by gradient descent on classification labels.
