@@ -1,0 +1,66 @@
+What is dw calculating?
+-----------------------
+dw is the gradient of the loss with respect to w — how much to nudge the slope to reduce error.
+
+        dw += 2 * err * x / len(xs)
+It comes from MSE loss:
+
+L = (1/n) Σ (pred − y)²
+
+Differentiating with respect to w:
+
+∂L/∂w = (2/n) Σ err · x
+
+Piece by piece:
+
+- 2 * err — from the derivative of squared error
+- * x — because pred = w*x + b, so changing w scales with x
+- / len(xs) — average over all points (mean)
+- += — accumulate that contribution for each (x, y)
+
+After the inner loop, dw tells you: if positive, decrease w; if negative, increase w (via w -= lr * dw).
+
+
+What's db calculating?
+----------------------
+db is the gradient of the loss with respect to b — how much to nudge the intercept to reduce error.
+
+        db += 2 * err / len(xs)
+From MSE: L = (1/n) Σ (pred − y)²
+
+Differentiating with respect to b:
+
+∂L/∂b = (2/n) Σ err
+
+Compared to dw:
+
+Same 2 * err / n from squared error
+No * x — because pred = w*x + b, so b shifts every prediction by 1, independent of x
+After the loop, use it like b -= lr * db (same idea as updating w with dw).
+
+
+Notes:
+------
+After training, plot the data points and the fitted line y = wx + b with matplotlib.
+
+Optional extras:
+
+- Print w and b after training to check the fit
+- Plot loss over epochs if you track MSE each epoch
+- Animate the line updating every N epochs to watch gradient descent
+
+
+Are these formulas static (pred, err, dw, db, w, b) or can they change?
+-----------------------------------------------------------------------
+The formulas can be swapped:
+
+Thing	        Your formula	        Could be different?
+-----           ------------            -------------------
+pred            w*x + b                 Yes — e.g. more features, polynomial, neural net
+
+err             pred - y                Same idea for regression; classification uses other errors
+
+dw / db         MSE gradients           Yes — different loss (MAE, Huber) → different derivatives
+
+update          w -= lr * dw            Yes — other optimizers (Adam, momentum, etc.)
+
