@@ -22,7 +22,9 @@ for epoch in range(20000):
         # this is the standard sigmoid derivative term
         d_out = (p - y) * p * (1 - p)
 
-        # backpropagate through hidden neurons
+        # backpropagate through hidden neurons.
+        # use the derivative of the sigmoid to propagate that error backward.
+        # The hidden neurons are connected to the output neuron through weights w[6] and w[7], so the error must be scaled by those weights.
         d_a = d_out * w[6] * a * (1 - a)
         d_b = d_out * w[7] * b * (1 - b)
 
@@ -49,4 +51,3 @@ for x0, x1, y in data:
     b = sig(w[3] * x0 + w[4] * x1 + w[5])
     p = sig(w[6] * a + w[7] * b + w[8])
     print((x0, x1), "target =", y, "prediction =", round(p, 4))
-    
