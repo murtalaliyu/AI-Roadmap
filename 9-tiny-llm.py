@@ -11,21 +11,25 @@ def chances(a):
 
 pairs = list(zip(the_last_bus, the_last_bus[1:]))
 
-for epoch in range(500):
+epochs = 10
+learning_rate = 0.1
+
+for epoch in range(epochs):
     print("epoch:", epoch + 1)
     for a, b in pairs:
         P = chances(a)
         for c in range(len(vocab)):
-            W[a][c] -= 0.1 * (P[c] - (vocab[c] == b))
+            W[a][c] -= learning_rate * (P[c] - (vocab[c] == b))
 
 random.seed(1)
 while True:
-    w  = input("Enter the first word: ")
-    if w in vocab:
-        break
-    print(w, "is not in the vocabulary. Try again.")
-num_words = int(input("Enter the number of generated words: "))
+    while True:
+        w  = input("\nEnter the first word: ")
+        if w in vocab:
+            break
+        print(w, "is not in the vocabulary. Try again.")
+    num_words = int(input("Enter the number of generated words: "))
 
-for k in range(num_words):
-    w = random.choices(vocab, chances(w))[0]
-    print(w, end=' ')
+    for k in range(num_words):
+        w = random.choices(vocab, chances(w))[0]
+        print(w, end=' ')
