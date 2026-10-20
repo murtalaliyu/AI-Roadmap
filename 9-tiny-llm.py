@@ -11,7 +11,7 @@ def chances(a):
 
 pairs = list(zip(the_last_bus, the_last_bus[1:]))
 
-epochs = 10
+epochs = 500
 learning_rate = 0.1
 
 for epoch in range(epochs):
