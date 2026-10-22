@@ -131,6 +131,6 @@ def _build_digit_dataset(samples_per_digit, test_samples_per_digit):
     return train, test
 
 
-train, test = _build_digit_dataset(50, 10)
+train, test = _build_digit_dataset(300, 100)
 
 __all__ = ["train", "test"]
