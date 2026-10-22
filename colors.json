@@ -1,0 +1,17 @@
+{
+  "samples_per_group": 200,
+  "groups": {
+    "reddish": {
+      "start_rgb": [150, 5, 5],
+      "end_rgb": [255, 75, 75]
+    },
+    "greenish": {
+      "start_rgb": [5, 150, 5],
+      "end_rgb": [75, 255, 75]
+    },
+    "blueish": {
+      "start_rgb": [5, 5, 150],
+      "end_rgb": [75, 75, 255]
+    }
+  }
+}
