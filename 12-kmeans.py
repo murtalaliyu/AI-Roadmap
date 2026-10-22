@@ -49,3 +49,22 @@ show_clusters(keep, best_C, "Best clustering")
 plt.ioff()
 print(np.bincount(keep))                    # photos per group
 plt.show()
+
+while True:
+    try:
+        rgb = np.array(
+            [float(channel.strip()) for channel in input("Enter RGB values (R,G,B; 0-255): ").split(",")]
+        )
+        if rgb.shape != (3,) or not np.isfinite(rgb).all():
+            raise ValueError
+        if ((rgb < 0) | (rgb > 255)).any():
+            raise ValueError
+        break
+    except ValueError:
+        print("Please enter exactly three numbers from 0 to 255, separated by commas.")
+
+distances = ((best_C - rgb) ** 2).sum(axis=1)
+cluster = distances.argmin()
+group_names = np.array(["red", "green", "blue"])
+group = group_names[best_C[cluster].argmax()]
+print(f"RGB {rgb.tolist()} belongs to the {group} group (cluster {cluster}).")
