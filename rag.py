@@ -17,7 +17,7 @@ def embed(t):                                       # text -> list of numbers
 E = np.array([embed(p) for p in pieces])
 
 def retrieve(q, k=2):                               # step 1: closest pieces
-    return np.argsort(-(E @ embed(q)))[:k]
+    return np.argsort(-(E @ embed(q)))[:k]          # cosine similarity scores
 
 hit = [retrieve(q)[0] == a for q, a in questions]
 

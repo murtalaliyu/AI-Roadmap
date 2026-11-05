@@ -47,12 +47,14 @@ def main():
     parser = argparse.ArgumentParser(description='Ask a question about the sample contract.')
     parser.add_argument('question', nargs='?', help='question to ask')
     args = parser.parse_args()
-    q = args.question or input('Ask a question about the contract: ').strip()
-    if not q:
-        parser.error('a question is required')
 
-    prompt = augment(q)
-    print(generate(prompt))
+    while True:
+        q = args.question or input('Ask a question about the contract: ').strip()
+        if not q:
+            parser.error('a question is required')
+    
+        prompt = augment(q)
+        print(generate(prompt))
 
 
 if __name__ == '__main__':
