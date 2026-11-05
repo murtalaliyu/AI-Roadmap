@@ -17,7 +17,7 @@ def augment(q, k=2):
 
 def generate(prompt):
     host = os.getenv('LLAMA_HOST', 'http://127.0.0.1:9931').rstrip('/')
-    model = os.getenv('LLAMA_MODEL', 'gemma-3-270m-it-qat-Q4_0')
+    model = os.getenv('LLAMA_MODEL', 'ggml-org/LFM2.5-24B-A2B-GGUF:Q4_K_M')
     url = host + '/v1/chat/completions'
     body = json.dumps({
         'model': model,
